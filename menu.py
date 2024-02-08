@@ -1,4 +1,5 @@
 import subprocess #imports the system shell commands
+import os
 from tkinter import *   # import everything from tkinter module, tkinter gives an gui 
 
 def execute_command(command):
@@ -35,11 +36,14 @@ def create_directory(directory_name, input_window):
     
     input_window.destroy()      #closes the input window
 
-    #does the directory creation
-    output_text.delete("1.0", END)  #clears windows if there is anything
-    result = execute_command(f"mkdir {directory_name}") #in python the f is important to include the text from the dir
-    listd()
-    output_text.insert("1.0", result)
+    if os.path.exists(directory_name):
+        result_message = f"The directory '{directory_name}' already exists"
+        output_text.delete(1.0, END)
+        output_text.insert(END, result_message)
+    else:
+        result = execute_command(f"mkdir {directory_name}") #executes mkdir
+        listd()  #show directory listing
+        output_text.insert("1.0", result)
     
 def concatenate():
     input_window = Toplevel(root)
@@ -59,21 +63,24 @@ def concatenated(file_paths, input_window):
     output_text.delete("1.0", END)
 
     paths = file_paths.split(',')
-
-    if len(paths) == 2:
+    if len(paths) != 2:
+        output_text.insert(END, "Provide two file names (including .txt)")
+    else:
         file1_path, file2_path = paths
-        content1 = execute_command(f"type {file1_path.strip()}")
-        content2 = execute_command(f"type {file2_path.strip()}")
+        if not (os.path.exists(file1_path.strip()) and os.path.exists(file2_path.strip())):
+            output_text.insert(END, "One or both of the provided file paths do not exist.")
+        else: 
+            content1 = execute_command(f"type {file1_path.strip()}")
+            content2 = execute_command(f"type {file2_path.strip()}")
 
         # Create a new file and write the concatenated contents
-        with open("new_file.txt", "w") as new_file:
-            new_file.write(content1)
-            new_file.write("\n\n")  # Add a separator between contents
-            new_file.write(content2)
+            with open("new_file.txt", "w") as new_file:
+                new_file.write(content1)
+                new_file.write("\n\n")  # Add a separator between contents
+                new_file.write(content2)
 
-        output_text.insert(END, f"New file 'new_file.txt' created with the contents of {file1_path.strip()} and {file2_path.strip()}")
-    else:
-        output_text.insert(END, "Please provide exactly two file paths.")
+            output_text.insert(END, f"New file 'new_file.txt' created with the contents of {file1_path.strip()} and {file2_path.strip()}")
+
 
     
 def deldir(): #i added the delete because i started creating folder to test and i wanted a way to remove them 
