@@ -102,11 +102,29 @@ def delete_dir(directory_name, input_window):
     result = execute_command(f"rmdir /s /q {directory_name}")
     listd()
     output_text.insert("1.0", result)
+def messageInput():
+    
+    input_window = Toplevel(root)       #create a window for user input
+    input_window.title("Enter a message to display")  #gives the title to the new window that helps the user
+
+    
+    label = Label(input_window, text="Enter a message to display:") #label for instruction
+    label.pack()  #to show it
+
+    # Entry widget for user input
+    entry = Entry(input_window) #to get the input as entry  
+    entry.pack()                #to show the window
+
+    # Button to confirm and create the new directory
+    confirm_button = Button(input_window, text="Create message", command=lambda: message(entry.get(), input_window))  #to create the button that will submit
+    confirm_button.pack()
     
 
-def message():
+def message(messages, input_window):
     output_text.delete(1.0, END)  # Clear previous output
-    result = execute_command("echo SOmething fun")
+    ##need to get user to enter what message
+
+    result = execute_command(f"echo the message: {messages}")
     output_text.insert(END, result)
     
 # create a tkinter window
@@ -140,7 +158,7 @@ btn6 = Button(root, text = 'Delete dir', bd = '5',
 btn6.pack(side = 'top') 
 
 btn4 = Button(root, text = 'Display a message', bd = '5',
-                          command = message) 
+                          command = messageInput) 
 # Set the position of button on the top of window.   
 btn4.pack(side = 'top') 
 btn5 = Button(root, text = 'Concatenate and display content of a file', bd = '5',
