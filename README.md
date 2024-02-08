@@ -24,7 +24,7 @@ The shell command that will be run is the dir
 Second option will print the current directory will use cd to print it in the window below.
 
 Third option is to create a new directory, the newdir will be called to call a window that will get user input for the new name. Then create_directory will be called to checked if there is a directory with that name exists with the os library. 
-If a directory with the name already exists then will display in the window that already exists otherwise the mkdir from shell will be called to create it. 
+If a directory with the name already exists then will display in the window that already exists otherwise the mkdir from shell will be called to create it and then it will call the 1st option to display the elements in the directory.
 
 Fourth option I added a delete dir that works the same as the make dir (without the validation) using the rmdir command because it was added for convenience. 
 
